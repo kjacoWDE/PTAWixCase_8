@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SINSS Clinical Reasoning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F7F4;--ink:#1C2A2F;--muted:#6E7B74;--line:#E2E6DF;--surface:#FFFFFF;
+    --teal:#2F6F6A;--teal-soft:#E8F0EC;--teal-deep:#234F4B;--alert:#C2542E;--alert-soft:#F7E9E1;
+    --amber:#B7791F;--amber-soft:#F6EEDD;
+    --shadow:0 1px 2px rgba(28,42,47,.04), 0 8px 30px rgba(28,42,47,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;padding:clamp(16px,4vw,48px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--teal);display:flex;align-items:center;gap:10px}
+  .eyebrow .tick{width:22px;height:1px;background:var(--teal)}
+  h1{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(28px,5vw,46px);line-height:1.05;
+    letter-spacing:-.01em;margin:14px 0 0}
+  .lede{color:var(--muted);font-size:clamp(15px,2.2vw,18px);max-width:60ch;margin-top:16px}
+  .btn{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:15px;border:none;border-radius:11px;
+    padding:14px 24px;cursor:pointer;background:var(--teal);color:#fff;transition:transform .15s,background .2s;
+    display:inline-flex;align-items:center;gap:10px}
+  .btn:hover{background:var(--teal-deep)} .btn:active{transform:translateY(1px)}
+  .btn:disabled{background:#B7C2BD;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--teal);border:1px solid var(--line)}
+  .btn.ghost:hover{background:var(--teal-soft)}
+  .btn:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+  .start-row{margin-top:28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .start-row .meta{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
+
+  /* progress rail */
+  .rail{display:flex;gap:8px;margin-top:26px;flex-wrap:wrap}
+  .rail .seg{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:var(--surface)}
+  .rail .seg.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .rail .seg.done{background:var(--teal-soft);color:var(--teal-deep);border-color:var(--teal-soft)}
+
+  .stage{display:grid;grid-template-columns:1fr 340px;gap:26px;margin-top:24px;align-items:start}
+  @media(max-width:860px){.stage{grid-template-columns:1fr}}
+  .scene{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:clamp(20px,3.2vw,32px);box-shadow:var(--shadow)}
+  .phase-tag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .phase-title{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(20px,3vw,27px);line-height:1.15;margin-top:8px}
+  .phase-sub{color:var(--muted);font-size:14.5px;margin-top:10px;max-width:56ch}
+
+  /* POC note */
+  .note{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:22px}
+  .note-head{background:var(--teal-deep);color:#EAF1EE;padding:14px 18px;font-family:"IBM Plex Mono",monospace;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .note-body{padding:20px 22px}
+  .note-dx{font-family:"Fraunces",serif;font-size:20px;font-weight:500;margin-bottom:14px}
+  .note-row{display:flex;gap:14px;padding:10px 0;border-top:1px solid var(--line);font-size:14.5px;line-height:1.5}
+  .note-row:first-of-type{border-top:none}
+  .note-row .lab{flex:0 0 132px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted);padding-top:2px}
+  .note-row .val{flex:1}
+  .note-row .val ul{margin:0;padding-left:18px} .note-row .val li{margin:2px 0}
+
+  /* interview */
+  .qgrid{display:grid;gap:10px;margin-top:20px}
+  .qbtn{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:14px 16px;
+    font-size:14.5px;font-family:inherit;color:var(--ink);cursor:pointer;transition:border-color .16s,background .16s;
+    display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .qbtn:hover{border-color:var(--teal);background:#fff}
+  .qbtn:disabled{opacity:.5;cursor:default;background:var(--surface)}
+  .qbtn .dim{display:none; font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--teal);flex:0 0 auto}
+
+  /* SINSS segmented */
+  .sinss-q{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
+  .sinss-q:first-child{border-top:none;padding-top:0;margin-top:12px}
+  .sinss-q .letter{font-family:"Fraunces",serif;font-weight:600;font-size:15px;color:var(--teal-deep);
+    background:var(--teal-soft);width:26px;height:26px;border-radius:7px;display:inline-grid;place-items:center;margin-right:9px}
+  .sinss-q .qh{display:flex;align-items:center;font-size:16px;font-weight:600}
+  .sinss-q .qp{font-size:13.5px;color:var(--muted);margin:8px 0 12px 35px}
+  .opts{display:flex;gap:8px;flex-wrap:wrap;margin-left:35px}
+  .opt{font-family:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--paper);border-radius:9px;
+    padding:9px 14px;cursor:pointer;color:var(--ink);transition:border-color .15s,background .15s}
+  .opt:hover{border-color:var(--teal)}
+  .opt.picked{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-deep);font-weight:600}
+  .opt.right{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-deep);font-weight:600}
+  .opt.wrong{border-color:#EAC9B8;background:var(--alert-soft);color:var(--alert)}
+  .opt:disabled{cursor:default}
+  .why{margin:12px 0 0 35px;font-size:13.5px;line-height:1.5;border-radius:9px;padding:11px 14px}
+  .why.good{background:var(--teal-soft);color:var(--teal-deep)}
+  .why.bad{background:var(--alert-soft);color:#7a3418}
+  .why .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:5px;opacity:.8}
+
+  /* interventions */
+  .ivlist{display:grid;gap:10px;margin-top:20px}
+  .iv{display:flex;gap:13px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);
+    border-radius:11px;padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s}
+  .iv:hover{border-color:var(--teal)}
+  .iv.sel{border-color:var(--teal);background:var(--teal-soft)}
+  .iv .box{flex:0 0 auto;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--muted);margin-top:1px;
+    display:grid;place-items:center;font-size:13px;color:#fff}
+  .iv.sel .box{background:var(--teal);border-color:var(--teal)}
+  .iv .txt{font-size:14.5px;line-height:1.45}
+  .iv.graded{cursor:default}
+  .iv.ok{border-color:var(--teal);background:var(--teal-soft)}
+  .iv.err{border-color:#EAC9B8;background:var(--alert-soft)}
+  .iv .verdict{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    margin-top:7px;display:block}
+  .iv .fb{font-size:13px;color:var(--ink);margin-top:6px;line-height:1.45}
+
+  /* side chart */
+  .chart{position:sticky;top:24px;display:grid;gap:16px}
+  @media(max-width:860px){.chart{position:static}}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 18px 20px;box-shadow:var(--shadow)}
+  .panel h3{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .pt-id{display:flex;gap:14px;align-items:center}
+  .pt-avatar{flex:0 0 auto;width:46px;height:46px;border-radius:50%;background:var(--teal-soft);color:var(--teal-deep);
+    display:grid;place-items:center;font-family:"Fraunces",serif;font-size:19px;font-weight:600}
+  .pt-name{font-family:"Fraunces",serif;font-size:19px;font-weight:500;line-height:1.1}
+  .pt-sub{font-size:13px;color:var(--muted);margin-top:2px}
+  .findings{list-style:none;display:grid;gap:9px;min-height:8px}
+  .findings li{font-size:13px;line-height:1.4;display:flex;gap:9px;align-items:flex-start;animation:rise .4s ease both}
+  .findings li .fd{flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--teal);background:var(--teal-soft);border-radius:4px;padding:2px 6px;margin-top:1px}
+  .empty-note{font-size:13px;color:var(--muted);font-style:italic}
+  .sinss-read{display:grid;gap:8px}
+  .sinss-read .r{display:flex;justify-content:space-between;align-items:center;font-size:13px;
+    padding:7px 0;border-bottom:1px solid var(--line)}
+  .sinss-read .r:last-child{border-bottom:none}
+  .sinss-read .r .rk{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .sinss-read .r .rv{font-weight:600;color:var(--teal-deep)}
+  .sinss-read .r .rv.blank{color:#C0C8C3;font-weight:400;font-style:italic}
+
+  /* debrief */
+  .verdict{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:clamp(22px,4vw,36px);box-shadow:var(--shadow)}
+  .verdict h2{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(23px,4vw,32px);line-height:1.12;margin-top:6px}
+  .score-strip{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+  .score-item .n{font-family:"Fraunces",serif;font-size:30px;font-weight:500;line-height:1}
+  .score-item .l{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  .expert{background:var(--teal-deep);color:#EAF1EE;border-radius:18px;padding:clamp(22px,4vw,32px);margin-top:22px}
+  .expert h3{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9DC3BC;margin-bottom:14px}
+  .expert p{font-size:15px;line-height:1.62;max-width:64ch} .expert p+p{margin-top:12px}
+  .expert em{font-style:italic;border-bottom:1px solid #4C736E}
+
+  .footer{margin-top:34px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.1em;color:var(--muted)}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section id="intro">
+    <div class="eyebrow"><span class="tick"></span><span id="i-kicker"></span></div>
+    <h1 id="i-title"></h1>
+    <p class="lede" id="i-lede"></p>
+    <div class="start-row">
+      <button class="btn" id="i-start" onclick="startCase()">Open the chart →</button>
+      <span class="meta" id="i-meta"></span>
+    </div>
+  </section>
+
+  <section id="sim" class="hidden">
+    <div class="eyebrow"><span class="tick"></span><span id="s-kicker"></span></div>
+    <div class="rail" id="rail"></div>
+    <div class="stage">
+      <div class="scene" id="scene"></div>
+      <aside class="chart">
+        <div class="panel">
+          <h3>Patient</h3>
+          <div class="pt-id">
+            <div class="pt-avatar" id="pt-avatar"></div>
+            <div><div class="pt-name" id="pt-name"></div><div class="pt-sub" id="pt-sub"></div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Subjective findings</h3>
+          <ul class="findings" id="findings"></ul>
+          <div id="findings-empty" class="empty-note">Interview the patient to gather findings.</div>
+        </div>
+        <div class="panel">
+          <h3>SINSS readout</h3>
+          <div class="sinss-read" id="sinss-read"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="debrief" class="hidden">
+    <div class="eyebrow"><span class="tick"></span>Session Debrief</div>
+    <div class="verdict" style="margin-top:18px">
+      <h2 id="d-title"></h2>
+      <div class="score-strip">
+        <div class="score-item"><div id="d-sinss" class="n"></div><div class="l">SINSS correct</div></div>
+        <div class="score-item"><div id="d-iv" class="n"></div><div class="l">Interventions correct</div></div>
+        <div class="score-item"><div id="d-flag" class="n"></div><div class="l">Change reported</div></div>
+      </div>
+    </div>
+    <div class="expert">
+      <h3 id="e-head"></h3>
+      <div id="e-body"></div>
+    </div>
+    <div class="start-row" style="justify-content:center">
+      <button class="btn" onclick="startCase()">Run it again →</button>
+      <button class="btn ghost" onclick="toIntro()">Back to start</button>
+    </div>
+  </section>
+
+  <div class="footer" id="foot"></div>
+</div>
+
+<script>
+/* =====================================================================
+   ▼▼▼  CASE START — replace this object to build a new SINSS case.
+        Ortho scenarios only (no neuro) for this student group.
+   ===================================================================== */
+const SINSS_CASE = {
+  meta: {
+    number: "S1",
+    kicker: "PTA Clinical Reasoning · SINSS",
+    title: "Ankle That Got Ahead of Itself",
+    lede: "You're the PTA carrying out an established plan of care. Read the note, interview the patient to determine their status today, then choose only the interventions that fit — and catch anyt[...]",
+    duration: "~8 minutes · interview · classify · treat",
+    patient: { initials: "TM", name: "Tara Molina", subtitle: "24 · recreational basketball" }
+  },
+
+  poc: {
+    label: "Plan of Care · initial eval 4 days ago",
+    dx: "Right lateral ankle sprain (ATFL/CFL), grade II",
+    fields: [
+      { lab: "Mechanism", val: "Inversion injury landing from a jump, 6 days ago." },
+      { lab: "Subjective", val: "Pain 6/10 with weight-bearing at eval; difficulty on stairs; goal is return to basketball." }
+    ],
+    objective: [
+      "Edema: figure-8 girth +2.5 cm vs left",
+      "AROM: dorsiflexion & inversion limited by pain",
+      "MMT: peroneals 4/5 (pain-limited), dorsiflexors 4/5",
+      "Special tests: anterior drawer positive; Ottawa ankle rules negative (no bony tenderness)",
+      "Balance: single-leg stance R < 5 sec",
+      "Gait: antalgic, reduced R stance time, using one crutch"
+    ],
+    stg: ["↓ edema, pain < 3/10 with WB, AROM ≥ 80% of left, ambulate without crutch — 2 wks"],
+    ltg: ["Return to full basketball; single-leg balance 30 sec; negative functional hop tests — 6 wks"],
+    plan: [
+      "Edema management: cryotherapy, compression, elevation",
+      "Pain-free AROM/PROM",
+      "Isometrics → progressive resisted eversion/dorsiflexion (theraband)",
+      "Proprioception: single-leg balance → unstable surface",
+      "Gait training to wean crutch",
+      "Progress to plyometric / agility drills as tolerated"
+    ]
+  },
+
+  interview: [
+    { dim:"Severity",   q:"How would you rate your pain right now, and at its worst today?", a:"“Sitting here, maybe a 4. When I'm up walking on it, it climbs to about a 6.”" },
+    { dim:"Irritability", q:"When it flares up, how long does it take to settle back down?", a:"“Pretty quick to hurt once I'm on it — and then it aches for a couple of hours even after I sit[...]" },
+    { dim:"Irritability", q:"Has anything set it off recently?", a:"“Honestly, I tried to jog on it at the weekend. Felt okay during, but it's been more swollen and sore since.”" },
+    { dim:"Nature",     q:"How would you describe the pain — and any numbness, tingling, or shooting?", a:"“It's a deep ache right around the outside of the ankle. No pins and needles, nothing sho[...]" },
+    { dim:"Stability",  q:"Compared with last week, is it better, the same, or worse?", a:"“It was steadily getting better… until the jog. Since then it's gone backwards a bit.”" },
+    { dim:"Stage",      q:"Remind me exactly when the injury happened?", a:"“Six days ago, in my Sunday league game.”" },
+    { dim:"Screen",     q:"Any new numbness, giving way, or trouble putting weight through it at all?", a:"“No giving way, and I can bear weight — it just complains when I do too much.”" }
+  ],
+
+  sinss: [
+    { letter:"S", key:"Severity", prompt:"How severe is the pain right now?",
+      options:["Mild (0–3/10)","Moderate (4–6/10)","Severe (7–10/10)"], correct:"Moderate (4–6/10)",
+      why:"4/10 at rest and 6/10 with weight-bearing sits squarely in the moderate band. Severity is about intensity — irritability captures how easily it's provoked." },
+    { letter:"I", key:"Irritability", prompt:"How irritable is the condition?",
+      options:["Low","Moderate","High"], correct:"High",
+      why:"Pain comes on quickly with activity and takes a couple of hours to settle — and it flared after a single jog. Quick to provoke, slow to settle, easily stirred up: that's high irritab[...]" },
+    { letter:"N", key:"Nature", prompt:"What is the nature of the pain?",
+      options:["Nociceptive","Neuropathic","Nociplastic"], correct:"Nociceptive",
+      why:"A localised, mechanical ache tied to tissue loading, with no neuro symptoms and a clear recent injury, is nociceptive — the expected picture for an acute sprain." },
+    { letter:"S", key:"Stability", prompt:"How is the condition progressing?",
+      options:["Improving","Same","Worsening"], correct:"Worsening",
+      why:"It had been improving, but the weekend jog set it back — more swelling and pain since. Right now the trajectory is worsening, which is a change worth reporting before you push the pl[...]" },
+    { letter:"S", key:"Stage", prompt:"What stage is the condition?",
+      options:["Acute (1–14 days)","Subacute (2–6 wks)","Chronic (> 6 wks)"], correct:"Acute (1–14 days)",
+      why:"Six days since injury places this firmly in the acute stage — tissue is still early in healing, which reinforces a protective, lower-load approach today." }
+  ],
+
+  interventions: {
+    prompt: "Given her status today — moderate severity, high irritability, worsening after the weekend — select only the interventions appropriate for this visit.",
+    items: [
+      { label:"Cryotherapy, compression, and elevation for edema", verdict:"perform",
+        why:"Directly addresses the fresh swelling from the flare and is low-load. Appropriate for an acute, irritable, recently aggravated ankle." },
+      { label:"Pain-free active range of motion", verdict:"perform",
+        why:"Gentle, within-tolerance motion maintains mobility without provoking an irritable joint. Keep it strictly pain-free today." },
+      { label:"Submaximal, pain-free isometrics", verdict:"perform",
+        why:"Low-load muscle activation the tissue can tolerate at this stage — appropriate given high irritability." },
+      { label:"Patient education: relative rest, hold off on jogging", verdict:"perform",
+        why:"The flare came from returning to impact too soon. Correcting that is one of the most valuable things you can do today." },
+      { label:"Notify the supervising PT of the worsening status before progressing", verdict:"report",
+        why:"Correct. A worsening trajectory is a significant change in status — report it and get direction before advancing the plan, rather than pushing ahead on your own." },
+      { label:"Progress to heavier resisted / eccentric theraband work", verdict:"hold",
+        why:"This is in the plan's progression, but not for today. Higher-load resistance on a highly irritable, worsening acute ankle is likely to flare it further." },
+      { label:"Advance balance training to an unstable/foam surface", verdict:"hold",
+        why:"Too much, too soon. Advancing proprioceptive challenge belongs at lower irritability and an improving trajectory, not today." },
+      { label:"Begin plyometric and agility (hopping, cutting) drills", verdict:"hold",
+        why:"Impact and cutting on an acute, high-irritability ankle that just regressed is the exact loading that caused the setback. Clearly inappropriate for this visit." }
+    ]
+  },
+
+  expert: {
+    heading: "How the reasoning fits together",
+    paragraphs: [
+      "The plan of care isn't wrong — it's a sound progression. The skill is recognising that a written plan describes the <em>arc</em>, while SINSS tells you where the patient is <em>today</em>. He[...]",
+      "Irritability is the value that most directly governs dosage: high irritability means less provocation, lower load, pain-free only. Pair that with an acute, worsening status and the aggressive i[...]"
+    ]
+  }
+};
+/* =====================================================================
+   ▲▲▲  CASE END — engine below; leave it alone.
+   ===================================================================== */
+
+const PHASES = ["Plan of care","Interview","Classify (SINSS)","Interventions"];
+const $ = id => document.getElementById(id);
+let state;
+
+function boot(){
+  const m = SINSS_CASE.meta;
+  document.title = m.title;
+  const tag = `${m.kicker} · ${m.number}`;
+  $("i-kicker").textContent = tag; $("s-kicker").textContent = tag;
+  $("i-title").textContent = m.title;
+  $("i-lede").textContent = m.lede;
+  $("i-meta").textContent = m.duration || "";
+  $("foot").textContent = "A reusable clinical-reasoning engine · Swarf ATX";
+  $("pt-avatar").textContent = m.patient.initials;
+  $("pt-name").textContent = m.patient.name;
+  $("pt-sub").textContent = m.patient.subtitle;
+}
+
+function toIntro(){ show("intro"); scrollTop(); }
+function show(w){ ["intro","sim","debrief"].forEach(s => $(s).classList.toggle("hidden", s!==w)); }
+function scrollTop(){ window.scrollTo({top:0,behavior:"instant"}); }
+
+function startCase(){
+  state = { phase:0, asked:[], findings:[], sinssPicks:{}, ivPicks:new Set() };
+  show("sim");
+  renderRail(); renderFindings(); renderSinssRead();
+  renderPhase();
+  scrollTop();
+}
+
+function renderRail(){
+  $("rail").innerHTML = "";
+  PHASES.forEach((p,i) => {
+    const d = document.createElement("span");
+    d.className = "seg" + (i===state.phase?" on":i<state.phase?" done":"");
+    d.textContent = (i+1) + " · " + p;
+    $("rail").appendChild(d);
+  });
+}
+
+function renderPhase(){
+  renderRail();
+  const s = $("scene");
+  if(state.phase===0) return renderPOC(s);
+  if(state.phase===1) return renderInterview(s);
+  if(state.phase===2) return renderSinss(s);
+  if(state.phase===3) return renderInterventions(s);
+}
+
+function renderPOC(s){
+  const p = SINSS_CASE.poc;
+  const obj = p.objective.map(o=>`<li>${o}</li>`).join("");
+  const plan = p.plan.map(o=>`<li>${o}</li>`).join("");
+  s.innerHTML = `
+    <div class="phase-tag">Phase 1 · Plan of care</div>
+    <div class="phase-title">Read the chart before you touch the patient</div>
+    <p class="phase-sub">This plan was written by the evaluating PT. Your job today is to carry it out — but only as far as the patient's current status allows.</p>
+    <div class="note">
+      <div class="note-head"><span>${p.label}</span><span>Ortho</span></div>
+      <div class="note-body">
+        <div class="note-dx">${p.dx}</div>
+        ${p.fields.map(f=>`<div class="note-row"><div class="lab">${f.lab}</div><div class="val">${f.val}</div></div>`).join("")}
+        <div class="note-row"><div class="lab">Objective</div><div class="val"><ul>${obj}</ul></div></div>
+        <div class="note-row"><div class="lab">Short-term goals</div><div class="val">${p.stg.join("<br>")}</div></div>
+        <div class="note-row"><div class="lab">Long-term goals</div><div class="val">${p.ltg.join("<br>")}</div></div>
+        <div class="note-row"><div class="lab">Treatment plan</div><div class="val"><ul>${plan}</ul></div></div>
+      </div>
+    </div>
+    <div class="start-row"><button class="btn" onclick="next()">Interview the patient →</button></div>`;
+}
+
+function renderInterview(s){
+  s.innerHTML = `
+    <div class="phase-tag">Phase 2 · Interview</div>
+    <div class="phase-title">Ask what you need to place her status</div>
+    <p class="phase-sub">Each question maps to part of the SINSS picture. Ask enough to classify all five — answers collect in the findings panel.</p>
+    <div class="qgrid" id="qgrid"></div>
+    <div class="start-row"><button class="btn" id="toClass" onclick="next()" ${state.asked.length? "":"disabled"}>Classify her status →</button></div>`;
+  const g = $("qgrid");
+  SINSS_CASE.interview.forEach((item,i) => {
+    const b = document.createElement("button");
+    b.className = "qbtn";
+    const asked = state.asked.includes(i);
+    b.disabled = asked;
+    b.innerHTML = `<span>${item.q}</span><span class="dim">${item.dim}</span>`;
+    b.onclick = () => {
+      state.asked.push(i);
+      addFinding(item.dim, item.a);
+      b.disabled = true;
+      $("toClass").disabled = false;
+    };
+    g.appendChild(b);
+  });
+}
+
+function addFinding(dim, text){
+  state.findings.push({dim, text});
+  renderFindings();
+}
+function renderFindings(){
+  const ul = $("findings");
+  ul.innerHTML = "";
+  if(state.findings.length) $("findings-empty").classList.add("hidden");
+  else $("findings-empty").classList.remove("hidden");
+  state.findings.forEach(f => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="fd">${f.dim}</span><span>${f.text}</span>`;
+    ul.appendChild(li);
+  });
+}
+
+function renderSinssRead(){
+  const box = $("sinss-read");
+  box.innerHTML = "";
+  SINSS_CASE.sinss.forEach(d => {
+    const picked = state.sinssPicks[d.key];
+    const r = document.createElement("div");
+    r.className = "r";
+    r.innerHTML = `<span class="rk">${d.key}</span><span class="rv ${picked?'':'blank'}">${picked||'—'}</span>`;
+    box.appendChild(r);
+  });
+}
+
+function renderSinss(s){
+  s.innerHTML = `
+    <div class="phase-tag">Phase 3 · Classify</div>
+    <div class="phase-title">Set her SINSS values</div>
+    <p class="phase-sub">Use the findings on the right. Pick once per row — you'll see whether it holds up and why.</p>
+    <div id="sinssq"></div>
+    <div class="start-row"><button class="btn" id="toIv" onclick="next()" disabled>Choose interventions →</button></div>`;
+  const box = $("sinssq");
+  SINSS_CASE.sinss.forEach((d,idx) => {
+    const wrap = document.createElement("div");
+    wrap.className = "sinss-q";
+    wrap.innerHTML = `<div class="qh"><span class="letter">${d.letter}</span>${d.key}</div>
+      <div class="qp">${d.prompt}</div>
+      <div class="opts" id="opts-${idx}"></div>
+      <div class="why hidden" id="why-${idx}"></div>`;
+    box.appendChild(wrap);
+    d.options.forEach(opt => {
+      const b = document.createElement("button");
+      b.className = "opt"; b.textContent = opt;
+      b.onclick = () => pickSinss(idx, opt, b);
+      $(`opts-${idx}`).appendChild(b);
+    });
+  });
+}
+
+function pickSinss(idx, opt, btn){
+  const d = SINSS_CASE.sinss[idx];
+  if(state.sinssPicks[d.key]) return; // lock first answer
+  state.sinssPicks[d.key] = opt;
+  const correct = opt === d.correct;
+  const opts = $(`opts-${idx}`).children;
+  for(const b of opts){
+    b.disabled = true;
+    if(b.textContent === d.correct) b.classList.add("right");
+    else if(b.textContent === opt) b.classList.add("wrong");
+  }
+  const w = $(`why-${idx}`);
+  w.classList.remove("hidden");
+  w.classList.add(correct?"good":"bad");
+  w.innerHTML = `<span class="k">${correct?"Holds up":"Reconsider — correct: "+d.correct}</span>${d.why}`;
+  renderSinssRead();
+  if(Object.keys(state.sinssPicks).length === SINSS_CASE.sinss.length) $("toIv").disabled = false;
+}
+
+function renderInterventions(s){
+  const iv = SINSS_CASE.interventions;
+  s.innerHTML = `
+    <div class="phase-tag">Phase 4 · Interventions</div>
+    <div class="phase-title">Build today's session</div>
+    <p class="phase-sub">${iv.prompt}</p>
+    <div class="ivlist" id="ivlist"></div>
+    <div class="start-row"><button class="btn" id="scoreBtn" onclick="scorePlan()">Score my plan →</button></div>`;
+  const list = $("ivlist");
+  iv.items.forEach((it,i) => {
+    const row = document.createElement("div");
+    row.className = "iv" + (state.ivPicks.has(i)?" sel":"");
+    row.innerHTML = `<div class="box">${state.ivPicks.has(i)?"✓":""}</div><div class="txt">${it.label}</div>`;
+    row.onclick = () => {
+      if(row.classList.contains("graded")) return;
+      if(state.ivPicks.has(i)){ state.ivPicks.delete(i); row.classList.remove("sel"); row.querySelector(".box").textContent=""; }
+      else { state.ivPicks.add(i); row.classList.add("sel"); row.querySelector(".box").textContent="✓"; }
+    };
+    list.appendChild(row);
+  });
+}
+
+function scorePlan(){
+  const iv = SINSS_CASE.interventions;
+  const rows = $("ivlist").children;
+  iv.items.forEach((it,i) => {
+    const shouldPick = it.verdict==="perform" || it.verdict==="report";
+    const picked = state.ivPicks.has(i);
+    const right = shouldPick === picked;
+    const row = rows[i];
+    row.classList.add("graded", right?"ok":"err");
+    const vlabel = it.verdict==="perform" ? "Appropriate today"
+      : it.verdict==="report" ? "Report before progressing"
+      : "Hold for today";
+    const tag = document.createElement("span");
+    tag.className = "verdict";
+    tag.style.color = right ? "var(--teal-deep)" : "var(--alert)";
+    tag.textContent = (picked?"You selected · ":"You held · ") + vlabel;
+    const fb = document.createElement("div");
+    fb.className = "fb"; fb.textContent = it.why;
+    row.appendChild(tag); row.appendChild(fb);
+    row.onclick = null;
+  });
+  $("scoreBtn").textContent = "See debrief →";
+  $("scoreBtn").onclick = toDebrief;
+}
+
+function next(){ state.phase++; renderPhase(); document.querySelector('.scene').scrollIntoView({behavior:'smooth',block:'start'}); }
+
+function toDebrief(){
+  const sinssCorrect = SINSS_CASE.sinss.filter(d => state.sinssPicks[d.key]===d.correct).length;
+  const iv = SINSS_CASE.interventions;
+  let ivCorrect = 0, reportItem = -1;
+  iv.items.forEach((it,i) => {
+    const shouldPick = it.verdict==="perform"||it.verdict==="report";
+    if(shouldPick === state.ivPicks.has(i)) ivCorrect++;
+    if(it.verdict==="report") reportItem = i;
+  });
+  const reported = reportItem>=0 && state.ivPicks.has(reportItem);
+  $("d-sinss").textContent = sinssCorrect + "/" + SINSS_CASE.sinss.length;
+  $("d-iv").textContent = ivCorrect + "/" + iv.items.length;
+  $("d-flag").textContent = reported ? "Yes" : "No";
+  const allSinss = sinssCorrect===SINSS_CASE.sinss.length;
+  $("d-title").textContent = (allSinss && ivCorrect===iv.items.length)
+    ? "You matched the treatment to the patient."
+    : (reported ? "Solid reasoning — a few calls to revisit." : "Good start — mind the status before you progress.");
+  $("e-head").textContent = SINSS_CASE.expert.heading;
+  const body = $("e-body"); body.innerHTML = "";
+  SINSS_CASE.expert.paragraphs.forEach(t => { const p=document.createElement("p"); p.innerHTML=t; body.appendChild(p); });
+  show("debrief"); scrollTop();
+}
+
+boot();
+</script>
+</body>
+</html>
