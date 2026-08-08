@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SINSS Clinical Reasoning</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
   :root{
     --paper:#F6F7F4;--ink:#1C2A2F;--muted:#6E7B74;--line:#E2E6DF;--surface:#FFFFFF;
@@ -34,14 +36,11 @@
   .btn:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
   .start-row{margin-top:28px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
   .start-row .meta{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
-
-  /* progress rail */
   .rail{display:flex;gap:8px;margin-top:26px;flex-wrap:wrap}
   .rail .seg{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
     color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:var(--surface)}
   .rail .seg.on{background:var(--teal);color:#fff;border-color:var(--teal)}
   .rail .seg.done{background:var(--teal-soft);color:var(--teal-deep);border-color:var(--teal-soft)}
-
   .stage{display:grid;grid-template-columns:1fr 340px;gap:26px;margin-top:24px;align-items:start}
   @media(max-width:860px){.stage{grid-template-columns:1fr}}
   .scene{background:var(--surface);border:1px solid var(--line);border-radius:18px;
@@ -49,8 +48,6 @@
   .phase-tag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
   .phase-title{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(20px,3vw,27px);line-height:1.15;margin-top:8px}
   .phase-sub{color:var(--muted);font-size:14.5px;margin-top:10px;max-width:56ch}
-
-  /* POC note */
   .note{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:22px}
   .note-head{background:var(--teal-deep);color:#EAF1EE;padding:14px 18px;font-family:"IBM Plex Mono",monospace;
     font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -62,8 +59,6 @@
     text-transform:uppercase;color:var(--muted);padding-top:2px}
   .note-row .val{flex:1}
   .note-row .val ul{margin:0;padding-left:18px} .note-row .val li{margin:2px 0}
-
-  /* interview */
   .qgrid{display:grid;gap:10px;margin-top:20px}
   .qbtn{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:14px 16px;
     font-size:14.5px;font-family:inherit;color:var(--ink);cursor:pointer;transition:border-color .16s,background .16s;
@@ -72,8 +67,6 @@
   .qbtn:disabled{opacity:.5;cursor:default;background:var(--surface)}
   .qbtn .dim{display:none; font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--teal);flex:0 0 auto}
-
-  /* SINSS segmented */
   .sinss-q{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
   .sinss-q:first-child{border-top:none;padding-top:0;margin-top:12px}
   .sinss-q .letter{font-family:"Fraunces",serif;font-weight:600;font-size:15px;color:var(--teal-deep);
@@ -92,8 +85,6 @@
   .why.good{background:var(--teal-soft);color:var(--teal-deep)}
   .why.bad{background:var(--alert-soft);color:#7a3418}
   .why .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:5px;opacity:.8}
-
-  /* interventions */
   .ivlist{display:grid;gap:10px;margin-top:20px}
   .iv{display:flex;gap:13px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);
     border-radius:11px;padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s}
@@ -109,8 +100,6 @@
   .iv .verdict{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
     margin-top:7px;display:block}
   .iv .fb{font-size:13px;color:var(--ink);margin-top:6px;line-height:1.45}
-
-  /* side chart */
   .chart{position:sticky;top:24px;display:grid;gap:16px}
   @media(max-width:860px){.chart{position:static}}
   .panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 18px 20px;box-shadow:var(--shadow)}
@@ -133,8 +122,6 @@
   .sinss-read .r .rk{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .sinss-read .r .rv{font-weight:600;color:var(--teal-deep)}
   .sinss-read .r .rv.blank{color:#C0C8C3;font-weight:400;font-style:italic}
-
-  /* debrief */
   .verdict{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:clamp(22px,4vw,36px);box-shadow:var(--shadow)}
   .verdict h2{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(23px,4vw,32px);line-height:1.12;margin-top:6px}
   .score-strip{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
@@ -144,16 +131,15 @@
   .expert h3{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9DC3BC;margin-bottom:14px}
   .expert p{font-size:15px;line-height:1.62;max-width:64ch} .expert p+p{margin-top:12px}
   .expert em{font-style:italic;border-bottom:1px solid #4C736E}
-
   .footer{margin-top:34px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.1em;color:var(--muted)}
   @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   .hidden{display:none!important}
 </style>
 </head>
+
 <body>
 <div class="wrap">
-
   <section id="intro">
     <div class="eyebrow"><span class="tick"></span><span id="i-kicker"></span></div>
     <h1 id="i-title"></h1>
@@ -189,7 +175,6 @@
       </aside>
     </div>
   </section>
-
   <section id="debrief" class="hidden">
     <div class="eyebrow"><span class="tick"></span>Session Debrief</div>
     <div class="verdict" style="margin-top:18px">
@@ -197,7 +182,6 @@
       <div class="score-strip">
         <div class="score-item"><div id="d-sinss" class="n"></div><div class="l">SINSS correct</div></div>
         <div class="score-item"><div id="d-iv" class="n"></div><div class="l">Interventions correct</div></div>
-        <div class="score-item"><div id="d-flag" class="n"></div><div class="l">Change reported</div></div>
       </div>
     </div>
     <div class="expert">
@@ -209,118 +193,208 @@
       <button class="btn ghost" onclick="toIntro()">Back to start</button>
     </div>
   </section>
-
   <div class="footer" id="foot"></div>
 </div>
-
 <script>
-/* =====================================================================
-   ▼▼▼  CASE START — replace this object to build a new SINSS case.
-        Ortho scenarios only (no neuro) for this student group.
-   ===================================================================== */
 const SINSS_CASE = {
-  meta: {
-    number: "S1",
-    kicker: "PTA Clinical Reasoning · SINSS",
-    title: "Ankle That Got Ahead of Itself",
-    lede: "You're the PTA carrying out an established plan of care. Read the note, interview the patient to determine their status today, then choose only the interventions that fit — and catch anyt[...]",
-    duration: "~8 minutes · interview · classify · treat",
-    patient: { initials: "TM", name: "Tara Molina", subtitle: "24 · recreational basketball" }
+  "meta": {
+    "number": "S8",
+    "kicker": "PTA Clinical Reasoning · SINSS",
+    "title": "Rotator Cuff Repair - Carpenter",
+    "lede": "You're the PTA seeing a carpenter 28 days after right supraspinatus repair. Interview him to determine SINSS, then select only interventions that protect the repair while progressing surgeon-approved passive motion.",
+    "duration": "~10 minutes · interview · classify · treat",
+    "patient": {
+      "initials": "RL",
+      "name": "Robert Landon",
+      "subtitle": "62 · carpenter"
+    }
   },
-
-  poc: {
-    label: "Plan of Care · initial eval 4 days ago",
-    dx: "Right lateral ankle sprain (ATFL/CFL), grade II",
-    fields: [
-      { lab: "Mechanism", val: "Inversion injury landing from a jump, 6 days ago." },
-      { lab: "Subjective", val: "Pain 6/10 with weight-bearing at eval; difficulty on stairs; goal is return to basketball." }
+  "poc": {
+    "label": "Plan of Care · initial evaluation",
+    "dx": "Post-op right rotator cuff repair (supraspinatus)",
+    "fields": [
+      {
+        "lab": "Mechanism",
+        "val": "Full-thickness supraspinatus tear surgical repair; 28 days post-op."
+      },
+      {
+        "lab": "Subjective",
+        "val": "Pain 3/10; cannot lift arm and has sleep discomfort; goal is return to light carpentry."
+      }
     ],
-    objective: [
-      "Edema: figure-8 girth +2.5 cm vs left",
-      "AROM: dorsiflexion & inversion limited by pain",
-      "MMT: peroneals 4/5 (pain-limited), dorsiflexors 4/5",
-      "Special tests: anterior drawer positive; Ottawa ankle rules negative (no bony tenderness)",
-      "Balance: single-leg stance R < 5 sec",
-      "Gait: antalgic, reduced R stance time, using one crutch"
+    "objective": [
+      "ROM: PROM shoulder R flexion 110°, ER 25°; L flexion 170°, ER 90°",
+      "Strength: deferred",
+      "Observations: mild swelling",
+      "Palpation: supraspinatus insertion tenderness",
+      "Accessory: GH inferior glide limited"
     ],
-    stg: ["↓ edema, pain < 3/10 with WB, AROM ≥ 80% of left, ambulate without crutch — 2 wks"],
-    ltg: ["Return to full basketball; single-leg balance 30 sec; negative functional hop tests — 6 wks"],
-    plan: [
-      "Edema management: cryotherapy, compression, elevation",
-      "Pain-free AROM/PROM",
-      "Isometrics → progressive resisted eversion/dorsiflexion (theraband)",
-      "Proprioception: single-leg balance → unstable surface",
-      "Gait training to wean crutch",
-      "Progress to plyometric / agility drills as tolerated"
+    "stg": [
+      "PROM flexion 140°",
+      "ER 40°",
+      "Pain ≤2/10"
+    ],
+    "ltg": [
+      "AROM flexion 160°",
+      "Strength 4+/5",
+      "Return to light carpentry"
+    ],
+    "plan": [
+      "Therapeutic Exercise to progress PROM → AAROM → AROM safely",
+      "Manual Therapy to improve GH joint mobility",
+      "Neuromuscular Reeducation to improve scapular control",
+      "Ultrasound to reduce post-operative pain",
+      "Therapeutic Activity to retrain functional reaching"
     ]
   },
-
-  interview: [
-    { dim:"Severity",   q:"How would you rate your pain right now, and at its worst today?", a:"“Sitting here, maybe a 4. When I'm up walking on it, it climbs to about a 6.”" },
-    { dim:"Irritability", q:"When it flares up, how long does it take to settle back down?", a:"“Pretty quick to hurt once I'm on it — and then it aches for a couple of hours even after I sit[...]" },
-    { dim:"Irritability", q:"Has anything set it off recently?", a:"“Honestly, I tried to jog on it at the weekend. Felt okay during, but it's been more swollen and sore since.”" },
-    { dim:"Nature",     q:"How would you describe the pain — and any numbness, tingling, or shooting?", a:"“It's a deep ache right around the outside of the ankle. No pins and needles, nothing sho[...]" },
-    { dim:"Stability",  q:"Compared with last week, is it better, the same, or worse?", a:"“It was steadily getting better… until the jog. Since then it's gone backwards a bit.”" },
-    { dim:"Stage",      q:"Remind me exactly when the injury happened?", a:"“Six days ago, in my Sunday league game.”" },
-    { dim:"Screen",     q:"Any new numbness, giving way, or trouble putting weight through it at all?", a:"“No giving way, and I can bear weight — it just complains when I do too much.”" }
+  "interview": [
+    {
+      "dim": "Severity",
+      "q": "How would you rate the shoulder pain today?",
+      "a": "It's about 3/10, mostly an ache, and sleeping is still uncomfortable."
+    },
+    {
+      "dim": "Irritability",
+      "q": "What brings the soreness on, and how long does it take to settle?",
+      "a": "It takes about 20 minutes of exercises or unsupported positioning to noticeably increase the ache, and about 20 minutes of supported rest for it to return to baseline."
+    },
+    {
+      "dim": "Nature",
+      "q": "How would you describe the pain? Any numbness or tingling?",
+      "a": "It's a tender postoperative ache near the outside of the shoulder. I don't have numbness or tingling."
+    },
+    {
+      "dim": "Stability",
+      "q": "Compared with last week, how is the shoulder progressing?",
+      "a": "It's improving slowly. The swelling is less and the passive exercises feel a little easier."
+    },
+    {
+      "dim": "Stage",
+      "q": "How long ago was the repair?",
+      "a": "Four weeks ago—28 days."
+    },
+    {
+      "dim": "Screen",
+      "q": "Any fever, drainage, sudden pop, new bruising, or accidental active lifting?",
+      "a": "No fever, drainage, or pop, and I haven't lifted with the arm."
+    }
   ],
-
-  sinss: [
-    { letter:"S", key:"Severity", prompt:"How severe is the pain right now?",
-      options:["Mild (0–3/10)","Moderate (4–6/10)","Severe (7–10/10)"], correct:"Moderate (4–6/10)",
-      why:"4/10 at rest and 6/10 with weight-bearing sits squarely in the moderate band. Severity is about intensity — irritability captures how easily it's provoked." },
-    { letter:"I", key:"Irritability", prompt:"How irritable is the condition?",
-      options:["Low","Moderate","High"], correct:"High",
-      why:"Pain comes on quickly with activity and takes a couple of hours to settle — and it flared after a single jog. Quick to provoke, slow to settle, easily stirred up: that's high irritab[...]" },
-    { letter:"N", key:"Nature", prompt:"What is the nature of the pain?",
-      options:["Nociceptive","Neuropathic","Nociplastic"], correct:"Nociceptive",
-      why:"A localised, mechanical ache tied to tissue loading, with no neuro symptoms and a clear recent injury, is nociceptive — the expected picture for an acute sprain." },
-    { letter:"S", key:"Stability", prompt:"How is the condition progressing?",
-      options:["Improving","Same","Worsening"], correct:"Worsening",
-      why:"It had been improving, but the weekend jog set it back — more swelling and pain since. Right now the trajectory is worsening, which is a change worth reporting before you push the pl[...]" },
-    { letter:"S", key:"Stage", prompt:"What stage is the condition?",
-      options:["Acute (1–14 days)","Subacute (2–6 wks)","Chronic (> 6 wks)"], correct:"Acute (1–14 days)",
-      why:"Six days since injury places this firmly in the acute stage — tissue is still early in healing, which reinforces a protective, lower-load approach today." }
+  "sinss": [
+    {
+      "letter": "S",
+      "key": "Severity",
+      "prompt": "How severe is the pain today?",
+      "options": [
+        "Low (0-3/10)",
+        "Moderate (4–6/10)",
+        "High (7–10/10)"
+      ],
+      "correct": "Mild (0–3/10)",
+      "why": "Robert reports 3/10 pain, which is at the upper limit of mild severity. Sleep discomfort matters for dosing but does not move the rating into moderate."
+    },
+    {
+      "letter": "I",
+      "key": "Irritability",
+      "prompt": "How irritable is the condition?",
+      "options": [
+        "Low",
+        "Moderate",
+        "High"
+      ],
+      "correct": "Moderate",
+      "why": "Low to Moderate Intensity activities lead to symptoms after a moderate amount of time and eases after an equal amount of time: Moderate Irritability"
+    },
+    {
+      "letter": "N",
+      "key": "Nature",
+      "prompt": "What is the nature of the pain?",
+      "options": [
+        "Nociceptive",
+        "Neuropathic",
+        "Nociplastic"
+      ],
+      "correct": "Nociceptive",
+      "why": "Localized postoperative aching, mild swelling, and insertion tenderness are expected nociceptive features of healing tissue. There are no neuropathic symptoms."
+    },
+    {
+      "letter": "S",
+      "key": "Stability",
+      "prompt": "How is the condition progressing?",
+      "options": [
+        "Improving",
+        "Same",
+        "Worsening"
+      ],
+      "correct": "Improving",
+      "why": "Swelling is decreasing and passive motion feels easier than last week. These are clear signs of an improving course."
+    },
+    {
+      "letter": "S",
+      "key": "Stage",
+      "prompt": "What stage is the condition?",
+      "options": [
+        "Acute (1–14 days)",
+        "Subacute (2–6 wks)",
+        "Chronic (>6 wks)"
+      ],
+      "correct": "Subacute (2–6 wks)",
+      "why": "Twenty-eight days equals four weeks after repair, placing him in the subacute stage. The repair remains biologically vulnerable despite mild pain."
+    }
   ],
-
-  interventions: {
-    prompt: "Given her status today — moderate severity, high irritability, worsening after the weekend — select only the interventions appropriate for this visit.",
-    items: [
-      { label:"Cryotherapy, compression, and elevation for edema", verdict:"perform",
-        why:"Directly addresses the fresh swelling from the flare and is low-load. Appropriate for an acute, irritable, recently aggravated ankle." },
-      { label:"Pain-free active range of motion", verdict:"perform",
-        why:"Gentle, within-tolerance motion maintains mobility without provoking an irritable joint. Keep it strictly pain-free today." },
-      { label:"Submaximal, pain-free isometrics", verdict:"perform",
-        why:"Low-load muscle activation the tissue can tolerate at this stage — appropriate given high irritability." },
-      { label:"Patient education: relative rest, hold off on jogging", verdict:"perform",
-        why:"The flare came from returning to impact too soon. Correcting that is one of the most valuable things you can do today." },
-      { label:"Notify the supervising PT of the worsening status before progressing", verdict:"report",
-        why:"Correct. A worsening trajectory is a significant change in status — report it and get direction before advancing the plan, rather than pushing ahead on your own." },
-      { label:"Progress to heavier resisted / eccentric theraband work", verdict:"hold",
-        why:"This is in the plan's progression, but not for today. Higher-load resistance on a highly irritable, worsening acute ankle is likely to flare it further." },
-      { label:"Advance balance training to an unstable/foam surface", verdict:"hold",
-        why:"Too much, too soon. Advancing proprioceptive challenge belongs at lower irritability and an improving trajectory, not today." },
-      { label:"Begin plyometric and agility (hopping, cutting) drills", verdict:"hold",
-        why:"Impact and cutting on an acute, high-irritability ankle that just regressed is the exact loading that caused the setback. Clearly inappropriate for this visit." }
+  "interventions": {
+    "prompt": "Choose only the interventions appropriate today for a four-week supraspinatus repair with mild severity, moderate irritability, and improving status, subject to the surgeon's protocol.",
+    "items": [
+      {
+        "label": "Surgeon-approved PROM for flexion and external rotation",
+        "verdict": "perform",
+        "why": "Protected passive motion addresses the 110° flexion and 25° ER limits without requiring cuff contraction; stay within protocol limits."
+      },
+      {
+        "label": "Active shoulder elevation against gravity",
+        "verdict": "hold",
+        "why": "At four weeks, active elevation may load the repair before adequate healing; timing must follow the surgeon-specific protocol."
+      },
+      {
+        "label": "Supported pendulum exercise",
+        "verdict": "perform",
+        "why": "A relaxed, supported pendulum can provide gentle motion when performed without active shoulder lifting."
+      },
+      {
+        "label": "Scapular setting with the arm supported",
+        "verdict": "perform",
+        "why": "Low-load scapular control can begin without loading the repaired supraspinatus."
+      },
+      {
+        "label": "Low-grade pain-relieving GH mobilization",
+        "verdict": "perform",
+        "why": "Gentle grades may address discomfort and limited glide, but aggressive end-range mobilization is inappropriate this early."
+      },
+      {
+        "label": "Sling positioning and sleep-support education",
+        "verdict": "perform",
+        "why": "Supporting the arm and avoiding prolonged unsupported positions can reduce night discomfort and protect the repair."
+      },
+      {
+        "label": "Resisted rotator cuff strengthening",
+        "verdict": "hold",
+        "why": "Strengthening the repaired tendon is premature at this stage and may jeopardize healing."
+      }
     ]
   },
-
-  expert: {
-    heading: "How the reasoning fits together",
-    paragraphs: [
-      "The plan of care isn't wrong — it's a sound progression. The skill is recognising that a written plan describes the <em>arc</em>, while SINSS tells you where the patient is <em>today</em>. He[...]",
-      "Irritability is the value that most directly governs dosage: high irritability means less provocation, lower load, pain-free only. Pair that with an acute, worsening status and the aggressive i[...]"
+  "expert": {
+    "heading": "Mild pain does not mean the repair is ready to load",
+    "paragraphs": [
+      "Robert is improving and reports only mild pain, but he is just four weeks after tendon repair. Stage and tissue-healing constraints take priority over how comfortable he feels, so passive motion must remain within the surgeon's limits and the shoulder should not be actively elevated or resisted prematurely.",
+      "Focus on protected PROM, supported pendulums, scapular setting, positioning, and gentle symptom-relieving manual care. Progression from PROM to AAROM, AROM, and strengthening must follow the operative protocol and response; a sudden pop, bruising, or functional loss warrants immediate communication with the surgeon."
     ]
   }
-};
+};;
 /* =====================================================================
    ▲▲▲  CASE END — engine below; leave it alone.
    ===================================================================== */
-
 const PHASES = ["Plan of care","Interview","Classify (SINSS)","Interventions"];
 const $ = id => document.getElementById(id);
 let state;
-
 function boot(){
   const m = SINSS_CASE.meta;
   document.title = m.title;
@@ -334,11 +408,9 @@ function boot(){
   $("pt-name").textContent = m.patient.name;
   $("pt-sub").textContent = m.patient.subtitle;
 }
-
 function toIntro(){ show("intro"); scrollTop(); }
 function show(w){ ["intro","sim","debrief"].forEach(s => $(s).classList.toggle("hidden", s!==w)); }
 function scrollTop(){ window.scrollTo({top:0,behavior:"instant"}); }
-
 function startCase(){
   state = { phase:0, asked:[], findings:[], sinssPicks:{}, ivPicks:new Set() };
   show("sim");
@@ -346,7 +418,6 @@ function startCase(){
   renderPhase();
   scrollTop();
 }
-
 function renderRail(){
   $("rail").innerHTML = "";
   PHASES.forEach((p,i) => {
@@ -356,7 +427,6 @@ function renderRail(){
     $("rail").appendChild(d);
   });
 }
-
 function renderPhase(){
   renderRail();
   const s = $("scene");
@@ -365,7 +435,6 @@ function renderPhase(){
   if(state.phase===2) return renderSinss(s);
   if(state.phase===3) return renderInterventions(s);
 }
-
 function renderPOC(s){
   const p = SINSS_CASE.poc;
   const obj = p.objective.map(o=>`<li>${o}</li>`).join("");
@@ -387,11 +456,10 @@ function renderPOC(s){
     </div>
     <div class="start-row"><button class="btn" onclick="next()">Interview the patient →</button></div>`;
 }
-
 function renderInterview(s){
   s.innerHTML = `
     <div class="phase-tag">Phase 2 · Interview</div>
-    <div class="phase-title">Ask what you need to place her status</div>
+    <div class="phase-title">Ask what you need to place the patient’s status</div>
     <p class="phase-sub">Each question maps to part of the SINSS picture. Ask enough to classify all five — answers collect in the findings panel.</p>
     <div class="qgrid" id="qgrid"></div>
     <div class="start-row"><button class="btn" id="toClass" onclick="next()" ${state.asked.length? "":"disabled"}>Classify her status →</button></div>`;
@@ -411,7 +479,6 @@ function renderInterview(s){
     g.appendChild(b);
   });
 }
-
 function addFinding(dim, text){
   state.findings.push({dim, text});
   renderFindings();
@@ -427,7 +494,6 @@ function renderFindings(){
     ul.appendChild(li);
   });
 }
-
 function renderSinssRead(){
   const box = $("sinss-read");
   box.innerHTML = "";
@@ -439,11 +505,10 @@ function renderSinssRead(){
     box.appendChild(r);
   });
 }
-
 function renderSinss(s){
   s.innerHTML = `
     <div class="phase-tag">Phase 3 · Classify</div>
-    <div class="phase-title">Set her SINSS values</div>
+    <div class="phase-title">Set the patient’s SINSS values</div>
     <p class="phase-sub">Use the findings on the right. Pick once per row — you'll see whether it holds up and why.</p>
     <div id="sinssq"></div>
     <div class="start-row"><button class="btn" id="toIv" onclick="next()" disabled>Choose interventions →</button></div>`;
@@ -464,10 +529,9 @@ function renderSinss(s){
     });
   });
 }
-
 function pickSinss(idx, opt, btn){
   const d = SINSS_CASE.sinss[idx];
-  if(state.sinssPicks[d.key]) return; // lock first answer
+  if(state.sinssPicks[d.key]) return;
   state.sinssPicks[d.key] = opt;
   const correct = opt === d.correct;
   const opts = $(`opts-${idx}`).children;
@@ -483,7 +547,6 @@ function pickSinss(idx, opt, btn){
   renderSinssRead();
   if(Object.keys(state.sinssPicks).length === SINSS_CASE.sinss.length) $("toIv").disabled = false;
 }
-
 function renderInterventions(s){
   const iv = SINSS_CASE.interventions;
   s.innerHTML = `
@@ -499,63 +562,78 @@ function renderInterventions(s){
     row.innerHTML = `<div class="box">${state.ivPicks.has(i)?"✓":""}</div><div class="txt">${it.label}</div>`;
     row.onclick = () => {
       if(row.classList.contains("graded")) return;
-      if(state.ivPicks.has(i)){ state.ivPicks.delete(i); row.classList.remove("sel"); row.querySelector(".box").textContent=""; }
-      else { state.ivPicks.add(i); row.classList.add("sel"); row.querySelector(".box").textContent="✓"; }
+      if(state.ivPicks.has(i)){
+        state.ivPicks.delete(i);
+        row.classList.remove("sel");
+        row.querySelector(".box").textContent="";
+      } else {
+        state.ivPicks.add(i);
+        row.classList.add("sel");
+        row.querySelector(".box").textContent="✓";
+      }
     };
     list.appendChild(row);
   });
 }
-
 function scorePlan(){
   const iv = SINSS_CASE.interventions;
   const rows = $("ivlist").children;
   iv.items.forEach((it,i) => {
-    const shouldPick = it.verdict==="perform" || it.verdict==="report";
+    const shouldPick = it.verdict==="perform";
     const picked = state.ivPicks.has(i);
     const right = shouldPick === picked;
     const row = rows[i];
     row.classList.add("graded", right?"ok":"err");
-    const vlabel = it.verdict==="perform" ? "Appropriate today"
-      : it.verdict==="report" ? "Report before progressing"
+    const vlabel = it.verdict==="perform"
+      ? "Appropriate today"
       : "Hold for today";
     const tag = document.createElement("span");
     tag.className = "verdict";
     tag.style.color = right ? "var(--teal-deep)" : "var(--alert)";
     tag.textContent = (picked?"You selected · ":"You held · ") + vlabel;
     const fb = document.createElement("div");
-    fb.className = "fb"; fb.textContent = it.why;
-    row.appendChild(tag); row.appendChild(fb);
+    fb.className = "fb";
+    fb.textContent = it.why;
+    row.appendChild(tag);
+    row.appendChild(fb);
     row.onclick = null;
   });
   $("scoreBtn").textContent = "See debrief →";
   $("scoreBtn").onclick = toDebrief;
 }
-
-function next(){ state.phase++; renderPhase(); document.querySelector('.scene').scrollIntoView({behavior:'smooth',block:'start'}); }
-
-function toDebrief(){
-  const sinssCorrect = SINSS_CASE.sinss.filter(d => state.sinssPicks[d.key]===d.correct).length;
-  const iv = SINSS_CASE.interventions;
-  let ivCorrect = 0, reportItem = -1;
-  iv.items.forEach((it,i) => {
-    const shouldPick = it.verdict==="perform"||it.verdict==="report";
-    if(shouldPick === state.ivPicks.has(i)) ivCorrect++;
-    if(it.verdict==="report") reportItem = i;
-  });
-  const reported = reportItem>=0 && state.ivPicks.has(reportItem);
-  $("d-sinss").textContent = sinssCorrect + "/" + SINSS_CASE.sinss.length;
-  $("d-iv").textContent = ivCorrect + "/" + iv.items.length;
-  $("d-flag").textContent = reported ? "Yes" : "No";
-  const allSinss = sinssCorrect===SINSS_CASE.sinss.length;
-  $("d-title").textContent = (allSinss && ivCorrect===iv.items.length)
-    ? "You matched the treatment to the patient."
-    : (reported ? "Solid reasoning — a few calls to revisit." : "Good start — mind the status before you progress.");
-  $("e-head").textContent = SINSS_CASE.expert.heading;
-  const body = $("e-body"); body.innerHTML = "";
-  SINSS_CASE.expert.paragraphs.forEach(t => { const p=document.createElement("p"); p.innerHTML=t; body.appendChild(p); });
-  show("debrief"); scrollTop();
+function next(){
+  state.phase++;
+  renderPhase();
+  document.querySelector('.scene').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
+function toDebrief(){
+  const sinssCorrect = SINSS_CASE.sinss.filter(
+    d => state.sinssPicks[d.key] === d.correct
+  ).length;
+  const iv = SINSS_CASE.interventions;
+  let ivCorrect = 0;
+  iv.items.forEach((it,i) => {
+    const shouldPick = it.verdict==="perform";
+    if(shouldPick === state.ivPicks.has(i)) ivCorrect++;
+  });
+  $("d-sinss").textContent = `${sinssCorrect}/${SINSS_CASE.sinss.length}`;
+  $("d-iv").textContent = `${ivCorrect}/${iv.items.length}`;
+  const allSinss = sinssCorrect === SINSS_CASE.sinss.length;
+  $("d-title").textContent =
+    (allSinss && ivCorrect===iv.items.length)
+      ? "You matched the treatment to the patient."
+      : "Good start — revisit the SINSS profile before you progress treatment.";
+  $("e-head").textContent = SINSS_CASE.expert.heading;
+  const body = $("e-body");
+  body.innerHTML = "";
+  SINSS_CASE.expert.paragraphs.forEach(t => {
+    const p = document.createElement("p");
+    p.innerHTML = t;
+    body.appendChild(p);
+  });
+  show("debrief");
+  scrollTop();
+}
 boot();
 </script>
 </body>
