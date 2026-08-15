@@ -462,7 +462,7 @@ function renderInterview(s){
     <div class="phase-title">Ask what you need to place the patient’s status</div>
     <p class="phase-sub">Each question maps to part of the SINSS picture. Ask enough to classify all five — answers collect in the findings panel.</p>
     <div class="qgrid" id="qgrid"></div>
-    <div class="start-row"><button class="btn" id="toClass" onclick="next()" ${state.asked.length? "":"disabled"}>Classify her status →</button></div>`;
+    <div class="start-row"><button class="btn" id="toClass" onclick="next()" ${state.asked.length? "":"disabled"}>Classify status →</button></div>`;
   const g = $("qgrid");
   SINSS_CASE.interview.forEach((item,i) => {
     const b = document.createElement("button");
